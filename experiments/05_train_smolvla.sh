@@ -33,8 +33,7 @@ lerobot-train \
   --dataset.image_transforms.enable=true \
   --policy.path="lerobot/smolvla_base" \
   --policy.device=cuda \
-  --policy.use_amp=true \
-  --policy.dtype=bfloat16 \
+  --policy.use_amp=false \
   --rename_map='{"observation.images.cam_high": "observation.images.image"}' \
   --policy.input_features='{"observation.images.image": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.state": {"type": "STATE", "shape": [6]}}' \
   --output_dir="$OUTPUT_DIR" \
