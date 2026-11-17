@@ -16,7 +16,18 @@ Containerized LeRobot (`0.6.1`) data-processing and policy-training pipeline con
 
 3. **Run an experiment script**:
    ```bash
+   # Phase 3: ACT single-episode overfit check
    ./rtx-training/docker/run.sh bash /workspace/rtx-training/experiments/03_act_overfit_sanity_check.sh
+
+   # Phase 5a: SmolVLA (450M) fine-tuning
+   DETACH=1 NAME=smolvla_train ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/05_train_smolvla.sh \
+     bendca61/so101-surface-transfer-v1-gsam-obscure 20000 8 8
+
+   # Phase 5b: X-VLA (879M) fine-tuning
+   DETACH=1 NAME=xvla_train ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/06_train_xvla.sh \
+     bendca61/so101-surface-transfer-v1-gsam-obscure 20000 8 8
    ```
 
 `docker/run.sh` automatically resolves the parent `Tesis` directory to `/workspace` (override with `TESIS_DIR=...`), mounts `~/.cache/rtx-docker` to `/cache`, passes GPU access via `--device nvidia.com/gpu=all`, and forwards `HF_TOKEN`, `HF_USER`, and `WANDB_API_KEY` from `~/.bashrc`.
