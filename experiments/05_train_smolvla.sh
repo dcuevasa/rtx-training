@@ -34,8 +34,8 @@ lerobot-train \
   --policy.path="lerobot/smolvla_base" \
   --policy.device=cuda \
   --policy.use_amp=false \
-  --rename_map='{"observation.images.cam_high": "observation.images.image"}' \
-  --policy.input_features='{"observation.images.image": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.state": {"type": "STATE", "shape": [6]}}' \
+  --rename_map='{"observation.images.cam_high": "observation.images.camera1", "observation.images.cam_wrist": "observation.images.camera2"}' \
+  --policy.input_features='{"observation.images.camera1": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.images.camera2": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.state": {"type": "STATE", "shape": [6]}}' \
   --output_dir="$OUTPUT_DIR" \
   --job_name="$JOB_NAME" \
   --batch_size="$BATCH_SIZE" \
