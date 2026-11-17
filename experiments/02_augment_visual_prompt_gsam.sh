@@ -12,12 +12,18 @@ INPUT_REPO="${1:-bendca61/so101-surface-transfer-v1-pruned}"
 OUTPUT_REPO="${2:-bendca61/so101-surface-transfer-v1-gsam-masks}"
 TARGET_OBJECTS="${3:-mug, bowl, remote, bottle, cellphone}"
 SAM_VERSION="${4:-vit_b}"
-MODE="${5:-seg}"       # 'seg' for pure instance mask overlays
+MODE="${5:-seg}"       # 'seg' for pure instance mask overlays, 'obscure' for reserved solid mask
 STRIDE="${6:-2}"     # Detection stride: 2 runs detection on every 2nd frame (15 Hz) & propagates masks (2x speedup)
+INITIAL_FRAMES="${7:-}"  # Optional: e.g. 5 to annotate only first 5 frames per episode
 
 MAX_EPISODES_FLAG=""
 if [[ -n "${MAX_EPISODES:-}" ]]; then
   MAX_EPISODES_FLAG="--max_episodes $MAX_EPISODES"
+fi
+
+INITIAL_FRAMES_FLAG=""
+if [[ -n "$INITIAL_FRAMES" ]]; then
+  INITIAL_FRAMES_FLAG="--initial_frames $INITIAL_FRAMES"
 fi
 
 echo "=========================================================="
@@ -43,6 +49,7 @@ python -m lerobot_vision_detector.cli.augment \
   --conf_threshold 0.25 \
   --text_threshold 0.25 \
   --stride "$STRIDE" \
+  $INITIAL_FRAMES_FLAG \
   --device cuda \
   --batch_size 16 \
   $MAX_EPISODES_FLAG \
