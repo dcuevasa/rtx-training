@@ -29,6 +29,10 @@ Containerized LeRobot (`0.6.1`) data-processing and policy-training pipeline con
      bash /workspace/rtx-training/experiments/04_train_act_full.sh \
      bendca61/so101-surface-transfer-v1-gsam-obscure-init5 5000 16 8 /workspace/outputs/train/act_init5_5k
 
+   # Phase 4b: Per-color-combination ACT specialists (all 9 <c1>-to-<c2> pairs, init-5 masked)
+   ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/07_train_act_color_pairs.sh all
+
    # Phase 5a: SmolVLA (450M) fine-tuning on init5 dataset
    DETACH=1 NAME=smolvla_train ./rtx-training/docker/run.sh \
      bash /workspace/rtx-training/experiments/05_train_smolvla.sh \
