@@ -7,10 +7,10 @@
 set -euo pipefail
 
 DATASET_REPO="${1:-bendca61/so101-surface-transfer-and-red-block-mix-pruned}"
-STEPS="${2:-20000}"
-BATCH_SIZE="${3:-8}"
+STEPS="${2:-35000}"
+BATCH_SIZE="${3:-16}"
 NUM_WORKERS="${4:-8}"
-OUTPUT_DIR="${5:-/workspace/outputs/train/smolvla_mixed_red_block_20k}"
+OUTPUT_DIR="${5:-/workspace/outputs/train/smolvla_mixed_red_block_35k_bs16}"
 JOB_NAME="$(basename "$OUTPUT_DIR")"
 
 echo "=========================================================="
@@ -35,6 +35,7 @@ lerobot-train \
   --policy.path="lerobot/smolvla_base" \
   --policy.device=cuda \
   --policy.use_amp=false \
+  --policy.scheduler_decay_steps="$STEPS" \
   --rename_map='{"observation.images.cam_high": "observation.images.camera1", "observation.images.cam_wrist": "observation.images.camera2"}' \
   --policy.input_features='{"observation.images.camera1": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.images.camera2": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.state": {"type": "STATE", "shape": [6]}}' \
   --output_dir="$OUTPUT_DIR" \
@@ -43,7 +44,7 @@ lerobot-train \
   --num_workers="$NUM_WORKERS" \
   --steps="$STEPS" \
   --save_freq=5000 \
-  --log_freq=100 \
+  --log_freq=200 \
   --wandb.enable=false \
   --policy.push_to_hub=false
 

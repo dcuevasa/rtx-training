@@ -51,7 +51,7 @@ Containerized LeRobot (`0.6.1`) data-processing and policy-training pipeline con
    # Phase 5c: SmolVLA (450M) fine-tuning on mixed unmasked pruned datasets (surface-transfer + red-block)
    ./rtx-training/docker/run.sh \
      bash /workspace/rtx-training/experiments/08_train_smolvla_mixed_red_block.sh \
-     bendca61/so101-surface-transfer-and-red-block-mix-pruned 20000 8 8 /workspace/outputs/train/smolvla_mixed_red_block_20k
+     bendca61/so101-surface-transfer-and-red-block-mix-pruned 35000 16 8 /workspace/outputs/train/smolvla_mixed_red_block_35k_bs16
    ```
 
 `docker/run.sh` automatically resolves the parent `Tesis` directory to `/workspace` (override with `TESIS_DIR=...`), mounts `~/.cache/rtx-docker` to `/cache`, passes GPU access via `--device nvidia.com/gpu=all`, and forwards `HF_TOKEN`, `HF_USER`, and `WANDB_API_KEY` from `~/.bashrc`.
