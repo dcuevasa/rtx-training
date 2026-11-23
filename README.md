@@ -33,6 +33,11 @@ Containerized LeRobot (`0.6.1`) data-processing and policy-training pipeline con
    ./rtx-training/docker/run.sh \
      bash /workspace/rtx-training/experiments/07_train_act_color_pairs.sh all
 
+   # Phase 4c: Red-block blue->pink dataset pruning (74 eps -> 6-DoF) & unmasked ACT general model
+   ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/01_prune_dataset.sh \
+     bendca61/so101-red-block-blue-to-pink-v1 bendca61/so101-red-block-blue-to-pink-v1-pruned
+
    # Phase 5a: SmolVLA (450M) fine-tuning on init5 dataset
    DETACH=1 NAME=smolvla_train ./rtx-training/docker/run.sh \
      bash /workspace/rtx-training/experiments/05_train_smolvla.sh \
@@ -42,6 +47,11 @@ Containerized LeRobot (`0.6.1`) data-processing and policy-training pipeline con
    DETACH=1 NAME=xvla_train ./rtx-training/docker/run.sh \
      bash /workspace/rtx-training/experiments/06_train_xvla.sh \
      bendca61/so101-surface-transfer-v1-gsam-obscure-init5 5000 8 8 /workspace/outputs/train/xvla_init5_5k
+
+   # Phase 5c: SmolVLA (450M) fine-tuning on mixed unmasked pruned datasets (surface-transfer + red-block)
+   ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/08_train_smolvla_mixed_red_block.sh \
+     bendca61/so101-surface-transfer-and-red-block-mix-pruned 20000 8 8 /workspace/outputs/train/smolvla_mixed_red_block_20k
    ```
 
 `docker/run.sh` automatically resolves the parent `Tesis` directory to `/workspace` (override with `TESIS_DIR=...`), mounts `~/.cache/rtx-docker` to `/cache`, passes GPU access via `--device nvidia.com/gpu=all`, and forwards `HF_TOKEN`, `HF_USER`, and `WANDB_API_KEY` from `~/.bashrc`.
