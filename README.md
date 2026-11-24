@@ -52,6 +52,11 @@ Containerized LeRobot (`0.6.1`) data-processing and policy-training pipeline con
    ./rtx-training/docker/run.sh \
      bash /workspace/rtx-training/experiments/08_train_smolvla_mixed_red_block.sh \
      bendca61/so101-surface-transfer-and-red-block-mix-pruned 35000 16 8 /workspace/outputs/train/smolvla_mixed_red_block_35k_bs16
+
+   # Phase 5d: Diffusion Policy (~260M, DDIM 16 steps) on 74-episode red-block dataset
+   ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/09_train_diffusion_red_block.sh \
+     bendca61/so101-red-block-blue-to-pink-v1-pruned 30000 16 8 /workspace/outputs/train/diffusion_red_block_blue_to_pink_30k
    ```
 
 `docker/run.sh` automatically resolves the parent `Tesis` directory to `/workspace` (override with `TESIS_DIR=...`), mounts `~/.cache/rtx-docker` to `/cache`, passes GPU access via `--device nvidia.com/gpu=all`, and forwards `HF_TOKEN`, `HF_USER`, and `WANDB_API_KEY` from `~/.bashrc`.

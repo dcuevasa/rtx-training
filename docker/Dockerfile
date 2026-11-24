@@ -40,4 +40,8 @@ RUN pip install --no-build-isolation "sam2" hydra-core iopath "gradio>=5.0.0" "w
 RUN pip install --no-cache-dir addict yapf timm supervision && \
     python -c "import addict, yapf, timm, supervision; print('Grounded-SAM dependencies installed successfully!')"
 
+# Diffusion Policy dependency (diffusers, constrained against NGC torch stack)
+RUN pip install --no-cache-dir -c /etc/pip/constraint.txt "diffusers>=0.27.2" && \
+    python -c "import diffusers; print('diffusers', diffusers.__version__)"
+
 WORKDIR /workspace
