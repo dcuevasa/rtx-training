@@ -31,9 +31,11 @@ lerobot-train \
   --dataset.repo_id="$DATASET_REPO" \
   --dataset.video_backend=pyav \
   --dataset.image_transforms.enable=true \
+  --dataset.image_transforms.tfs='{"brightness":{"weight":1.0,"type":"ColorJitter","kwargs":{"brightness":[0.8,1.2]}},"contrast":{"weight":1.0,"type":"ColorJitter","kwargs":{"contrast":[0.8,1.2]}},"saturation":{"weight":1.0,"type":"ColorJitter","kwargs":{"saturation":[0.5,1.5]}},"hue":{"weight":1.0,"type":"ColorJitter","kwargs":{"hue":[-0.05,0.05]}},"sharpness":{"weight":1.0,"type":"SharpnessJitter","kwargs":{"sharpness":[0.5,1.5]}},"affine":{"weight":0.0,"type":"RandomAffine","kwargs":{"degrees":[-5.0,5.0],"translate":[0.05,0.05]}}}' \
   --policy.path="lerobot/smolvla_base" \
   --policy.device=cuda \
   --policy.use_amp=false \
+  --policy.scheduler_decay_steps="$STEPS" \
   --rename_map='{"observation.images.cam_high": "observation.images.camera1", "observation.images.cam_wrist": "observation.images.camera2"}' \
   --policy.input_features='{"observation.images.camera1": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.images.camera2": {"type": "VISUAL", "shape": [3, 480, 640]}, "observation.state": {"type": "STATE", "shape": [6]}}' \
   --output_dir="$OUTPUT_DIR" \
@@ -42,7 +44,7 @@ lerobot-train \
   --num_workers="$NUM_WORKERS" \
   --steps="$STEPS" \
   --save_freq=5000 \
-  --log_freq=50 \
+  --log_freq=200 \
   --wandb.enable=false \
   --policy.push_to_hub=false
 

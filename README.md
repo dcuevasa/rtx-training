@@ -57,6 +57,22 @@ Containerized LeRobot (`0.6.1`) data-processing and policy-training pipeline con
    ./rtx-training/docker/run.sh \
      bash /workspace/rtx-training/experiments/09_train_diffusion_red_block.sh \
      bendca61/so101-red-block-blue-to-pink-v1-pruned 30000 16 8 /workspace/outputs/train/diffusion_red_block_blue_to_pink_30k
+
+   # Phase 5e: Unfrozen-VLM SmolVLA (306.47M trainable) on 74-episode red-block dataset
+   ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/10_train_smolvla_red_block_vlm.sh \
+     bendca61/so101-red-block-blue-to-pink-v1-pruned 25000 16 8 /workspace/outputs/train/smolvla_red_block_vlm_25k_bs16
+
+   # Phase 5f: X-VLA (0.9B, 518.85M trainable) specialist on 74-episode red-block dataset
+   ./rtx-training/docker/run.sh \
+     bash /workspace/rtx-training/experiments/11_train_xvla_red_block.sh \
+     bendca61/so101-red-block-blue-to-pink-v1-pruned 25000 16 8 /workspace/outputs/train/xvla_red_block_25k_bs16
+
+   # Evaluation: Multi-policy benchmark (phase error, 6-DoF per-joint, smoothness, camera attribution)
+   ./rtx-training/docker/run.sh python3 /workspace/rtx-training/tools/evaluate_policy_benchmark.py \
+     --dataset bendca61/so101-red-block-blue-to-pink-v1-pruned \
+     --models XVLA=bendca61/xvla-so101-red-block-blue-to-pink Diffusion=bendca61/diffusion-so101-red-block-blue-to-pink \
+     --episodes 24 --out-json /workspace/outputs/benchmarks/bench.json --out-md /workspace/outputs/benchmarks/bench.md
    ```
 
 `docker/run.sh` automatically resolves the parent `Tesis` directory to `/workspace` (override with `TESIS_DIR=...`), mounts `~/.cache/rtx-docker` to `/cache`, passes GPU access via `--device nvidia.com/gpu=all`, and forwards `HF_TOKEN`, `HF_USER`, and `WANDB_API_KEY` from `~/.bashrc`.
